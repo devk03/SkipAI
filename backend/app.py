@@ -1,6 +1,9 @@
 from flask import Flask
-# from openai import OpenAI
+import openai
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 # client = OpenAI()
 app = Flask(__name__)
 
@@ -15,3 +18,7 @@ def transcript():
 def hello_world():
     """Send the question to the OpenAI API."""
     return {"message": "Success"}
+
+
+if __name__ == "__main__":
+    app.run()
