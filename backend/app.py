@@ -1,7 +1,7 @@
 from flask import Flask
-from openai import OpenAI
+# from openai import OpenAI
 
-client = OpenAI()
+# client = OpenAI()
 app = Flask(__name__)
 
 
