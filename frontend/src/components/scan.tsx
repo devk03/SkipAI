@@ -7,8 +7,23 @@ function Scan() {
   const handleChange = (event: any) => {
     setQuestion(event.target.value);
   };
-  const handleSubmission = () => {
-    console.log("Submitted:", question);
+  const handleSubmission = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:5000/question", {
+        method: "POST", // Post request
+        headers: {
+          "Content-Type": "application/json", // Json Data being sent
+        },
+        body: JSON.stringify({
+          question: question, // Example data you want to send
+        }),
+      });
+
+      const data = await response.json(); // Parse JSON response
+      console.log(data); // Log the response data
+    } catch (error) {
+      console.error("Error:", error); // Handle any errors
+    }
   };
   const handleButtonClick = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -52,6 +67,20 @@ function Scan() {
                     error
                   );
                 });
+              // Actually send the transcript to get posted
+              try {
+                fetch("http://127.0.0.1:5000/transcript", {
+                  method: "POST", // Post request
+                  headers: {
+                    "Content-Type": "application/json", // Json Data being sent
+                  },
+                  body: JSON.stringify({
+                    transcript: transcript,
+                  }),
+                });
+              } catch (error) {
+                console.error("Error:", error); // Handle any errors
+              }
             } else {
               // Handle case where no track element is found
               console.log("Track element not found");
