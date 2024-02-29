@@ -2,6 +2,14 @@ import React from "react";
 import { useState } from "react";
 function Scan() {
   const [trackElement, setTrackElement] = useState();
+  const [transcript, setTranscript] = useState("");
+  const [question, setQuestion] = useState("");
+  const handleChange = (event: any) => {
+    setQuestion(event.target.value);
+  };
+  const handleSubmission = () => {
+    console.log("Submitted:", question);
+  };
   const handleButtonClick = () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0 && tabs[0].id !== undefined) {
@@ -24,8 +32,26 @@ function Scan() {
               const rkRegex = /rk=([^&]+)/;
               const rkMatch = src ? src.match(rkRegex) : null;
               const rkValue = rkMatch ? rkMatch[1] : null;
-
               console.log(rkValue); // Outputs: bN2TOQ
+              const url = `https://leccap.engin.umich.edu/leccap/player/api/webvtt/?rk=${rkValue}`;
+
+              fetch(url)
+                .then((response) => {
+                  if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                  }
+                  return response.text(); // or response.json() if the response is JSON
+                })
+                .then((data) => {
+                  console.log(data); // Process your data here
+                  setTranscript(data);
+                })
+                .catch((error) => {
+                  console.error(
+                    "There was a problem with your fetch operation:",
+                    error
+                  );
+                });
             } else {
               // Handle case where no track element is found
               console.log("Track element not found");
@@ -38,7 +64,18 @@ function Scan() {
     });
   };
 
-  return <button onClick={handleButtonClick}>Query Track Element</button>;
+  return (
+    <>
+      {!transcript ? (
+        <button onClick={handleButtonClick}>SkipAI</button>
+      ) : (
+        <>
+          <input type="text" value={question} onChange={handleChange} />
+          <button onClick={handleSubmission}>Submit</button>
+        </>
+      )}
+    </>
+  );
 }
 
 export default Scan;
