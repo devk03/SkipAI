@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function Scan() {
   const [trackElement, setTrackElement] = useState();
   const [transcript, setTranscript] = useState("");
@@ -25,7 +25,25 @@ function Scan() {
       console.error("Error:", error); // Handle any errors
     }
   };
+  useEffect(() => {
+    // This effect runs whenever the transcript state updates
+    if (transcript) {
+      // If transcript is not empty, send it in a POST request
+      try {
+        fetch("http://127.0.0.1:5000/transcript", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ transcript }),
+        });
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  }, [transcript]);
   const handleButtonClick = () => {
+    // Inject javascript into the webpage
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0 && tabs[0].id !== undefined) {
         chrome.tabs.sendMessage(
@@ -50,6 +68,7 @@ function Scan() {
               console.log(rkValue); // Outputs: bN2TOQ
               const url = `https://leccap.engin.umich.edu/leccap/player/api/webvtt/?rk=${rkValue}`;
 
+              // Extract the lecture transcript from CAEN
               fetch(url)
                 .then((response) => {
                   if (!response.ok) {
@@ -67,20 +86,6 @@ function Scan() {
                     error
                   );
                 });
-              // Actually send the transcript to get posted
-              try {
-                fetch("http://127.0.0.1:5000/transcript", {
-                  method: "POST", // Post request
-                  headers: {
-                    "Content-Type": "application/json", // Json Data being sent
-                  },
-                  body: JSON.stringify({
-                    transcript: transcript,
-                  }),
-                });
-              } catch (error) {
-                console.error("Error:", error); // Handle any errors
-              }
             } else {
               // Handle case where no track element is found
               console.log("Track element not found");
@@ -96,7 +101,7 @@ function Scan() {
   return (
     <>
       {!transcript ? (
-        <button onClick={handleButtonClick}>SkipAI</button>
+        <button onClick={handleButtonClick}>Scan</button>
       ) : (
         <>
           <input type="text" value={question} onChange={handleChange} />

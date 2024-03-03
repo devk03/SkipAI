@@ -4,7 +4,7 @@
 __pycache__/
 venv/
 *.py[cod]
-
+__pycache__/app.cpython-310.pyc
 # Flask
 instance/
 .webassets-cache
@@ -12,6 +12,7 @@ instance/
 # Environment variables
 .env
 .env.local
+env/
 
 # IDE
 .vscode/
@@ -22,3 +23,6 @@ instance/
 
 # Miscellaneous
 .DS_Store
+
+# Chroma
+chroma.db/
