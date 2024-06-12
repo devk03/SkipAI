@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
   var button = document.getElementById("copyCookies");
   button.addEventListener("click", function () {
     getCookies(
-      "https://leccap.engin.umich.edu/leccap/player/r/bN2TOQ",
-      "AWSALB",
+      "https://leccap.engin.umich.edu/leccap/player/r/ugrl6v",
+      "PHPSESSID",
       function (id) {
         alert(id);
       }

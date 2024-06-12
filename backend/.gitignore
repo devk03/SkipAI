@@ -1,28 +1,10 @@
-.env.local
-# Python
-*.pyc
+# Ignore all __pycache__ directories recursively
 __pycache__/
-venv/
-*.py[cod]
-__pycache__/app.cpython-310.pyc
-# Flask
-instance/
-.webassets-cache
 
-# Environment variables
+# Ensure that all __pycache__ directories at any level are ignored
+**/__pycache__/
+
+# Ignore all environment files
 .env
-.env.local
 env/
-
-# IDE
-.vscode/
-.idea/
-
-# Logs
-*.log
-
-# Miscellaneous
-.DS_Store
-
-# Chroma
-chroma.db/
+env
