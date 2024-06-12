@@ -5,4 +5,4 @@ skipAI is a Chrome extension designed to enhance your Umich lecture viewing expe
 
 - ReactJS Frontend (Chrome Extension)
 - Flask Backend (Python)
-- ChromeDB + Langchain (Vector DB + LLM)
+- Pinecone + Langchain (Vector DB + LLM)
