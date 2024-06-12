@@ -1,0 +1,44 @@
+import re
+
+
+def removeTimestamps(transcript):
+    print(">>> Removing Timestamps\n")
+    # Define the regex pattern to match timestamps
+    pattern = r"\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\n"
+    # Add pattern for the WEBVTT and possible leading/trailing spaces
+    pattern_full = (
+        r"WEBVTT\n\n|\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\n|\n{2,}"
+    )
+
+    # Remove the timestamps using the regex pattern
+    cleaned_transcript = re.sub(pattern_full, "", transcript)
+
+    # Replace newlines with spaces
+    cleaned_transcript = cleaned_transcript.replace("\n", " ")
+
+    return cleaned_transcript.strip()
+
+
+def parseTranscript(transcript, chunk_size=200):
+    """
+    Parses the transcript into list/chunks of ~200 words
+    """
+    # Split the transcript into words
+    words = transcript.split()
+
+    # Initialize variables
+    chunks = []
+    current_chunk = []
+
+    # Iterate over the words and create chunks
+    for word in words:
+        current_chunk.append(word)
+        if len(current_chunk) >= chunk_size:
+            chunks.append(" ".join(current_chunk))
+            current_chunk = []
+
+    # Add the last chunk if it contains any words
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+
+    return chunks
