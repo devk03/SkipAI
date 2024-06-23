@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Request
-from .utils.parsing import removeTimestamps
+from .utils.parsing import removeTimestamps, parseTranscript, printToFile
 import requests
 
 router = APIRouter()
+
 
 @router.post("/lecture")
 async def fetch_lecture(request: Request):
@@ -21,6 +22,7 @@ async def fetch_lecture(request: Request):
     response = requests.get(url, cookies={"PHPSESSID": PHPSESSID})
 
     # Parse the content of all timestamps from the response
-    rawTranscript = removeTimestamps(response.content.decode('utf-8'))
-    print(rawTranscript)
+    rawTranscript = removeTimestamps(response.content.decode("utf-8"))
+    parsedTranscript = parseTranscript(rawTranscript)
+    printToFile(parsedTranscript)
     return {"content": rawTranscript}

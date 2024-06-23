@@ -19,9 +19,9 @@ def removeTimestamps(transcript):
     return cleaned_transcript.strip()
 
 
-def parseTranscript(transcript, chunk_size=200):
+def parseTranscript(transcript, chunk_size=250):
     """
-    Parses the transcript into list/chunks of ~200 words
+    Parses the transcript into list/chunks of N words
     """
     # Split the transcript into words
     words = transcript.split()
@@ -41,4 +41,15 @@ def parseTranscript(transcript, chunk_size=200):
     if current_chunk:
         chunks.append(" ".join(current_chunk))
 
-    return chunks
+    return "#####".join(chunks)
+
+def printToFile(obj, filename='output.txt', mode='a'):
+    """
+    Prints the given object to a file.
+    
+    :param obj: The object to print (can be any type)
+    :param filename: The name of the file to write to (default: 'output.txt')
+    :param mode: The file opening mode (default: 'a' for append)
+    """
+    with open(filename, mode) as f:
+        print(obj, file=f)
